@@ -8,8 +8,10 @@ import tracer.Vector;
  * @author james
  */
 public class Entities {
-    private Vector position;
-    private RGB colour;
+    protected Vector position;
+    protected RGB colour;
+    protected double[] reflectivity; // [ambient, diffuse, specular]
+    protected double shininess;
     
     public Vector getPosition(){
         return position;
@@ -19,11 +21,11 @@ public class Entities {
         return colour;
     }
     
-    public void setPosition(Vector position){
-        this.position = position;
+    public double[] getReflectivity(){
+        return reflectivity;
     }
     
-    public void setColour(RGB colour){
-        this.colour = colour;
+    public double getShininess(){
+        return shininess;
     }
 }

@@ -10,10 +10,12 @@ import tracer.Vector;
 public class Plane extends Entities{
     private final Vector normal;
     
-    public Plane(Vector position, Vector normal, RGB colour){
-        setPosition(position);
+    public Plane(Vector position,  RGB colour, double[] reflectivity, double shininess, Vector normal){
+        this.position = position;
+        this.colour = colour;
+        this.reflectivity = reflectivity;
+        this.shininess = shininess;
         this.normal = normal;
-        setColour(colour);
     }
     
     public Vector getNormal(){

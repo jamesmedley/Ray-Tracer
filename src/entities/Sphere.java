@@ -10,10 +10,12 @@ import tracer.Vector;
 public class Sphere extends Entities{
     private final double radius;
     
-    public Sphere(Vector position, double radius, RGB colour){
-        setPosition(position);
+    public Sphere(Vector position,  RGB colour, double[] reflectivity, double shininess, double radius){
+        this.position = position;
+        this.colour = colour;
+        this.reflectivity = reflectivity;
+        this.shininess = shininess;
         this.radius = radius;
-        setColour(colour);
     }
     
     public double getRadius(){

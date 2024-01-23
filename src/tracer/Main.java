@@ -12,8 +12,8 @@ import javax.imageio.ImageIO;
  * @author james
  */
 public class Main {
-    private final int WIDTH = 1000;
-    private final int HEIGHT = 1000;
+    static final int WIDTH = 1000;
+    static final int HEIGHT = 1000;
     
     
     public static void main(String[] args) {
@@ -23,12 +23,13 @@ public class Main {
     
     private void generate(){
         Renderer renderer = new Renderer(WIDTH, HEIGHT);
+        
+        
         /*
             Scene scene = new Scene();
             scene.addSphere() ... etc
             Tracer tracer = new Tracer(renderer) ????
             tracer.trace(scene)
-            Ray tracing goes here yikes!
         
         */
         int[] image = renderer.getImage();
