@@ -10,7 +10,10 @@ import tracer.Vector;
 public class Entities {
     protected Vector position;
     protected RGB colour;
-    protected double[] reflectivity; // [ambient, diffuse, specular]
+    protected double diffuse;
+    protected double specular;
+    protected double transmissive;
+    protected double emissive;
     protected double shininess;
     
     public Vector getPosition(){
@@ -21,8 +24,20 @@ public class Entities {
         return colour;
     }
     
-    public double[] getReflectivity(){
-        return reflectivity;
+    public double getDiffuse(){
+        return diffuse;
+    }
+    
+    public double getSpecular(){
+        return specular;
+    }
+    
+    public double getTransmissive(){
+        return transmissive;
+    }
+    
+    public double getEmissive(){
+        return emissive;
     }
     
     public double getShininess(){

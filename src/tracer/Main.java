@@ -12,9 +12,10 @@ import javax.imageio.ImageIO;
  * @author james
  */
 public class Main {
-    static final int WIDTH = 1000;
-    static final int HEIGHT = 1000;
-    
+    static public final int WIDTH = 1000;
+    static public final int HEIGHT = 1000;
+    static public final double DFOV = 1; // 1 radian = approx. 60 degrees
+    private final double ambient = 1;
     
     public static void main(String[] args) {
         Main main = new Main();
@@ -23,12 +24,17 @@ public class Main {
     
     private void generate(){
         Renderer renderer = new Renderer(WIDTH, HEIGHT);
+        Scene scene = new Scene(ambient);
+        scene.addPlane(new Vector(0,0,0), new RGB(255,0,0), new double[]{0.5, 0.5, 0.5}, 10, new Vector(0,1,0)); // floor
+        scene.addSphere(new Vector(0,0,100), new RGB(0,0,255), new double[]{0.5, 0.5, 1}, 30, 100);
+        
+        Tracer tracer = new Tracer(renderer);
+        tracer.traceImage(scene);
+        
+        
         
         
         /*
-            Scene scene = new Scene();
-            scene.addSphere() ... etc
-            Tracer tracer = new Tracer(renderer) ????
             tracer.trace(scene)
         
         */

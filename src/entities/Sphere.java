@@ -13,7 +13,7 @@ public class Sphere extends Entities{
     public Sphere(Vector position,  RGB colour, double[] reflectivity, double shininess, double radius){
         this.position = position;
         this.colour = colour;
-        this.reflectivity = reflectivity;
+        this.properties = reflectivity;
         this.shininess = shininess;
         this.radius = radius;
     }
