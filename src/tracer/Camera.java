@@ -20,7 +20,7 @@ public class Camera {
     }
 
     
-    public Ray rayForPixel(int row, int column){ // image coordinates
+    public Ray rayForPixel(double row, double column){ // image coordinates
         Vector worldPixelCoordinate = imageToWorldCoordinates(new double[]{row, column});
         return new Ray(position, worldPixelCoordinate.addVector(position.scale(-1)).normalise(1));
     }

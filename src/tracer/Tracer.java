@@ -1,7 +1,9 @@
 package tracer;
 
 import entities.Entity;
+import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
@@ -16,12 +18,27 @@ public class Tracer {
         camera = new Camera();
     }
     
-    public Renderer traceImage(Scene scene){
+    public Renderer traceImage(Scene scene, int samplesPerPixel){
         int[] imageDimensions = renderer.getDimensions();
+        Random random = new Random(); // for anti-aliasing
         for(int i=0; i<imageDimensions[0];i++){
             for (int j = 0; j < imageDimensions[1]; j++) {
-                Ray ray = camera.rayForPixel(i, j);
-                renderer.paintPixel(new int[]{i,j}, traceRay(ray, scene));
+                RGB pixelColor = new RGB(0,0,0);
+
+            // Apply multiple samples per pixel for anti-aliasing
+                for (int s = 0; s < samplesPerPixel; s++) {
+                    // Generate random offsets for each sample
+                    double offsetX = random.nextDouble();
+                    double offsetY = random.nextDouble();
+
+                    // Use the offset to create a jittered ray
+                    Ray ray = camera.rayForPixel(i + offsetX, j + offsetY);
+
+                    // Accumulate color for each sample
+                    pixelColor = pixelColor.addNoLimit(traceRay(ray, scene));
+                }
+                pixelColor = pixelColor.divide(samplesPerPixel);
+                renderer.paintPixel(new int[]{i,j}, pixelColor);
             }
         }
         return renderer;

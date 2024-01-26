@@ -43,6 +43,13 @@ public class RGB {
         return new RGB(r, g , b);
     }
     
+    public RGB addNoLimit(RGB colour){
+        double r = RED+colour.RED;
+        double g = GREEN+colour.GREEN;
+        double b = BLUE+colour.BLUE;
+        return new RGB(r, g , b);
+    }
+    
     public RGB multiply(Vector colour){
         double r = Math.max(0,Math.min(RED*colour.getX(), 1));
         double g = Math.max(0,Math.min(GREEN*colour.getY(), 1));
@@ -50,9 +57,15 @@ public class RGB {
         return new RGB(r, g , b);
     }
     
+    public RGB divide(int samplesPerPixel) {
+        return new RGB(RED/samplesPerPixel, GREEN/samplesPerPixel, BLUE/samplesPerPixel);
+    }
+    
     
     @Override
     public String toString(){
         return RED + ", " + GREEN + ", " + BLUE;
     }
+
+    
 }

@@ -28,17 +28,17 @@ public class Main {
         Scene scene = new Scene(ambient);
         scene.addPlane(new Vector(0,0,1000), new Vector(1,0,0),new Vector(1,1,1),0,0, 10, new Vector(0,0,-1)); // back
         scene.addPlane(new Vector(0,-500,0), new Vector(0,1,0),new Vector(1,1,1),0,0, 10, new Vector(0,1,0)); // floor
-        scene.addPlane(new Vector(500,0,0), new Vector(0,0,1),new Vector(1,1,1),0,0, 5, new Vector(-1,0,0)); // RHS wall
+        scene.addPlane(new Vector(500,0,0), new Vector(0,0,1),new Vector(1,1,1),0,0, 10, new Vector(-1,0,0)); // RHS wall
         scene.addPlane(new Vector(-500,0,0), new Vector(0,0,1),new Vector(1,1,1),0,0, 10, new Vector(1,0,0)); // LHS wall
         scene.addPlane(new Vector(0,500,0), new Vector(0,1,0),new Vector(1,1,1),0,0, 10, new Vector(0,-1,0)); // ceiling
-        scene.addSphere(new Vector(200,-400,100), new Vector(1,0,0), new Vector(1,1,1),0,0, 1000, 100);
-        scene.addSphere(new Vector(-200,-320,100), new Vector(0,0,1), new Vector(1,1,1),0,0, 300, 180);
+        scene.addSphere(new Vector(200,-400,100), new Vector(0,0,1), new Vector(1,1,1),0,0, 100, 100);
+        scene.addSphere(new Vector(-200,-320,100), new Vector(1,1,1), new Vector(1,1,1),0,0, 400, 180);
         scene.addLight(new Vector(-499,499,999), new RGB(1,1,1), new RGB(1,1,1));
         scene.addLight(new Vector(499,-499,999), new RGB(1,1,1), new RGB(1,1,1));
         scene.addLight(new Vector(-499,-499,0), new RGB(1,1,1), new RGB(1,1,1));
         scene.addLight(new Vector(499,499,0), new RGB(1,1,1), new RGB(1,1,1));
         Tracer tracer = new Tracer(renderer);
-        tracer.traceImage(scene);
+        tracer.traceImage(scene, 3);
        
         double[] image = renderer.getImage();
         System.out.println(Arrays.toString(image));
