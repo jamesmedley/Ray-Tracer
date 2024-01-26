@@ -11,7 +11,7 @@ import tracer.Vector;
 public class Plane extends Entity{
     private final Vector normal;
     
-    public Plane(Vector position, Vector diffuse, Vector specular, double transmissive, double emissive, double shininess, Vector normal){
+    public Plane(Vector position, Vector diffuse, Vector specular, double transmissive, RGB emissive, double shininess, Vector normal){
         this.position = position;
         this.diffuse = diffuse;
         this.specular = specular;

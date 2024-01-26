@@ -16,7 +16,7 @@ public class Main {
     static public final int WIDTH = 1000;
     static public final int HEIGHT = 1000;
     static public final double DFOV = 1; // 1 radian = approx. 60 degrees
-    private final RGB ambient = new RGB(0,0,0);
+    private final RGB ambient = new RGB(0.1,0.1,0.1);
     
     public static void main(String[] args) {
         Main main = new Main();
@@ -26,19 +26,21 @@ public class Main {
     private void generate(){
         Renderer renderer = new Renderer(WIDTH, HEIGHT);
         Scene scene = new Scene(ambient);
-        scene.addPlane(new Vector(0,0,1000), new Vector(1,0,0),new Vector(1,1,1),0,0, 10, new Vector(0,0,-1)); // back
-        scene.addPlane(new Vector(0,-500,0), new Vector(0,1,0),new Vector(1,1,1),0,0, 10, new Vector(0,1,0)); // floor
-        scene.addPlane(new Vector(500,0,0), new Vector(0,0,1),new Vector(1,1,1),0,0, 10, new Vector(-1,0,0)); // RHS wall
-        scene.addPlane(new Vector(-500,0,0), new Vector(0,0,1),new Vector(1,1,1),0,0, 10, new Vector(1,0,0)); // LHS wall
-        scene.addPlane(new Vector(0,500,0), new Vector(0,1,0),new Vector(1,1,1),0,0, 10, new Vector(0,-1,0)); // ceiling
-        scene.addSphere(new Vector(200,-400,100), new Vector(0,0,1), new Vector(1,1,1),0,0, 100, 100);
-        scene.addSphere(new Vector(-200,-320,100), new Vector(1,1,1), new Vector(1,1,1),0,0, 400, 180);
-        scene.addLight(new Vector(-499,499,999), new RGB(1,1,1), new RGB(1,1,1));
-        scene.addLight(new Vector(499,-499,999), new RGB(1,1,1), new RGB(1,1,1));
-        scene.addLight(new Vector(-499,-499,0), new RGB(1,1,1), new RGB(1,1,1));
+        scene.addPlane(new Vector(0,0,1000), new Vector(1,0,0),new Vector(0,0,0),0, new RGB(0,0,0), 0, new Vector(0,0,-1)); // back
+        scene.addPlane(new Vector(0,-500,0), new Vector(1,1,1),new Vector(0.1,0.1,0.1),0, new RGB(0,0,0), 1000, new Vector(0,1,0)); // floor
+        scene.addPlane(new Vector(500,0,0), new Vector(0,0,1),new Vector(0,0,0),0,new RGB(0,0,0), 10, new Vector(-1,0,0)); // RHS wall
+        scene.addPlane(new Vector(-500,0,0), new Vector(0,0,1),new Vector(0,0,0),0,new RGB(0,0,0), 10, new Vector(1,0,0)); // LHS wall
+        scene.addPlane(new Vector(0,500,0), new Vector(0,1,0),new Vector(0,0,0),0,new RGB(0,0,0), 10, new Vector(0,-1,0)); // ceiling
+        scene.addSphere(new Vector(200,-400,100), new Vector(0.125,0.961,0.753), new Vector(0,0,0),0, new RGB(0,0,0), 10, 100);
+        scene.addSphere(new Vector(-300,-320,100), new Vector(0.984,0.09, 1), new Vector(1,1,1),0, new RGB(0,0,0), 1000, 180);
+        scene.addSphere(new Vector(0,-220,700), new Vector(0,0.067, 1), new Vector(1,1,1),0, new RGB(0,0,0), 1000, 280);
+        
+        scene.addLight(new Vector(499,499,999), new RGB(1,1,1), new RGB(1,1,1));
         scene.addLight(new Vector(499,499,0), new RGB(1,1,1), new RGB(1,1,1));
+        scene.addLight(new Vector(-499,499,999), new RGB(1,1,1), new RGB(1,1,1));
+        scene.addLight(new Vector(-499,499,0), new RGB(1,1,1), new RGB(1,1,1));
         Tracer tracer = new Tracer(renderer);
-        tracer.traceImage(scene, 3);
+        tracer.traceImage(scene, 10);
        
         double[] image = renderer.getImage();
         System.out.println(Arrays.toString(image));

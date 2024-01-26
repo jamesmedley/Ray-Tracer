@@ -12,6 +12,7 @@ import java.util.Random;
 public class Tracer {
     private final Renderer renderer;
     private final Camera camera;
+    private final double DELTA = 0.0001;
     
     public Tracer(Renderer renderer){
         this.renderer = renderer;
@@ -35,7 +36,7 @@ public class Tracer {
                     Ray ray = camera.rayForPixel(i + offsetX, j + offsetY);
 
                     // Accumulate color for each sample
-                    pixelColor = pixelColor.addNoLimit(traceRay(ray, scene));
+                    pixelColor = pixelColor.addNoLimit(traceRay(ray, scene, 10));
                 }
                 pixelColor = pixelColor.divide(samplesPerPixel);
                 renderer.paintPixel(new int[]{i,j}, pixelColor);
@@ -44,22 +45,22 @@ public class Tracer {
         return renderer;
     }
     
-    private RGB traceRay(Ray ray, Scene scene){
+    private RGB traceRay(Ray ray, Scene scene, int depth){
         Intersection intersection = scene.intersect(ray);
-      //  System.out.println(intersection.getIntersection().getX() + ", " +intersection.getIntersection().getY() + ", " +intersection.getIntersection().getZ());
+        if (depth < 1 || intersection == null) {
+            // Stopping condition: return a default color or handle termination
+            return new RGB(0, 0, 0); // Assuming RGB is a class with appropriate constructor
+        }
         RGB I = shade(intersection, ray, scene);
-       // System.out.println(I.toString());
-        //Vector intersectionPoint = intersection.getIntersection();
-        //Vector normal = intersection.getSurfaceNormal();
-        //Entity entity = intersection.getEntity();
-        //Vector rayDirection = ray.getDirection();
-        //Vector R = rayDirection.addVector(normal.scale(2*(rayDirection.dot(normal))));
-        //Vector T = new Vector(0,0,0);
-                // I = I.add(traceRay(new Ray(intersectionPoint, R), scene).scale(entity.getSpecular()))
-                // .add(traceRay(new Ray(intersectionPoint, T), scene).scale(entity.getTransmissive())); 
-                                
+        Vector intersectionPoint = intersection.getIntersection();
+        Vector normal = intersection.getSurfaceNormal();
+        Entity entity = intersection.getEntity();
+        Vector rayDirection = ray.getDirection();
+        Vector R = rayDirection.addVector(normal.scale(-2*(rayDirection.dot(normal))));
+        Vector T = new Vector(0,0,0);
+        I = I.add(traceRay(new Ray(intersectionPoint.addVector(R.scale(DELTA)), R), scene, depth-1).multiply(entity.getSpecular()));
+             //.add(traceRay(new Ray(intersectionPoint, T), scene, depth-1).scale(entity.getTransmissive())); 
         return I;
-        
     }
     
     private RGB shade(Intersection intersection, Ray ray, Scene scene){
@@ -69,16 +70,12 @@ public class Tracer {
         }
         Entity entity = intersection.getEntity();
         I = I.multiply(entity.getDiffuse());
-       // System.out.println(I.toString());
         Vector intersectionPoint = intersection.getIntersection();
         Vector normal = intersection.getSurfaceNormal();
         ArrayList<LightSource> lights = scene.getLights();
         RGB diffuse = new RGB(0,0,0);
         RGB specular = new RGB(0,0,0);
-       // System.out.println("----------------------------------------------------------");
-      //  System.out.println(intersectionPoint);
         for(LightSource light:lights){
-          //  System.out.println(light.getPosition());
             RGB intensityDiffuse = light.getIntensityDiffuse();
             RGB intensitySpecular = light.getIntensitySpecular();
             
@@ -96,13 +93,13 @@ public class Tracer {
             diffuse = diffuse.add(intensityDiffuse.scale(NdotL * attenuation));
             specular = specular.add(intensitySpecular.scale(NdotH_alpha * attenuation));
         }
-        I = I.add(diffuse.multiply(entity.getDiffuse())).add(specular.multiply(entity.getSpecular()));
+        I = I.add(diffuse.multiply(entity.getDiffuse())).add(specular.multiply(entity.getSpecular())).add(entity.getEmissive());
         
         return I;
     }
     
     private int shadowAttenuation(LightSource light, Vector lightDirection, Vector intersectionPoint, Scene scene){
-        Ray ray = new Ray(intersectionPoint.addVector(lightDirection.scale(0.001)), lightDirection);
+        Ray ray = new Ray(intersectionPoint.addVector(lightDirection.scale(DELTA)), lightDirection);
         Intersection intersection = scene.intersect(ray);
         if(intersection == null){
             return 1;

@@ -30,7 +30,7 @@ public class LightSource{
     public double distanceAttenuation(Vector point){
         // constants to fine tune attenuation effect
         double a = 0.000005;
-        double b = 0.001;
+        double b = 0;
         double c = 0;
         
         double distance = position.addVector(point.scale(-1)).magnitude();

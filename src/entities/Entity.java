@@ -13,7 +13,7 @@ public class Entity {
     protected Vector diffuse;
     protected Vector specular;
     protected double transmissive;  // t should be 1-s
-    protected double emissive;
+    protected RGB emissive;
     protected double shininess;
     
     public Vector getPosition(){
@@ -32,7 +32,7 @@ public class Entity {
         return transmissive;
     }
     
-    public double getEmissive(){
+    public RGB getEmissive(){
         return emissive;
     }
     

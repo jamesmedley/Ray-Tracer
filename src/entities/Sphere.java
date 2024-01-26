@@ -1,5 +1,6 @@
 package entities;
 
+import tracer.RGB;
 import tracer.Ray;
 import tracer.Vector;
 
@@ -11,7 +12,7 @@ public class Sphere extends Entity {
 
     private final double radius;
 
-    public Sphere(Vector position, Vector diffuse, Vector specular, double transmissive, double emissive, double shininess, double radius) {
+    public Sphere(Vector position, Vector diffuse, Vector specular, double transmissive, RGB emissive, double shininess, double radius) {
         this.position = position;
         this.diffuse = diffuse;
         this.specular = specular;

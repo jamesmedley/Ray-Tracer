@@ -30,11 +30,11 @@ public class Scene {
         return lights;
     }
     
-    public void addSphere(Vector position,  Vector diffuse, Vector specular, double transmissive, double emissive, double shininess, double radius){
+    public void addSphere(Vector position,  Vector diffuse, Vector specular, double transmissive, RGB emissive, double shininess, double radius){
         entities.add(new Sphere(position, diffuse, specular, transmissive, emissive, shininess, radius));
     }
     
-    public void addPlane(Vector position, Vector diffuse, Vector specular, double transmissive, double emissive, double shininess, Vector normal){
+    public void addPlane(Vector position, Vector diffuse, Vector specular, double transmissive, RGB emissive, double shininess, Vector normal){
         entities.add(new Plane(position, diffuse, specular, transmissive, emissive, shininess, normal));
     }
     
