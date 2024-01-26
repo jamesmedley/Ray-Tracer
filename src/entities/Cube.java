@@ -4,6 +4,6 @@ package entities;
  *
  * @author james
  */
-public class Cube extends Entities{
+public class Cube extends Entity{
     
 }

@@ -12,7 +12,7 @@ public class Camera {
     public Camera(){
         double diagonalLength = Math.sqrt(Math.pow(Main.WIDTH/2, 2) + Math.pow(Main.HEIGHT/2, 2));
         double d = diagonalLength/Math.tan(Main.DFOV/2);
-        position = new Vector(0,0,-d);
+        position = new Vector(0,0, -d);
     }
     
     public Vector getPosition(){

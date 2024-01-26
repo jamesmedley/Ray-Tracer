@@ -16,16 +16,16 @@ public class Vector {
         this.z = z;
     }
 
-    public int getX() {
-        return (int) x;
+    public double getX() {
+        return x;
     }
 
-    public int getY() {
-        return (int) y;
+    public double getY() {
+        return y;
     }
     
-    public int getZ() {
-        return (int) z;
+    public double getZ() {
+        return z;
     }
 
     public Vector addVector(Vector vector) {
@@ -40,9 +40,13 @@ public class Vector {
         return new Vector(scale*x, scale*y, scale*z);
     }
     
+    public Vector pointMultiply(Vector vector){
+        return new Vector(x*vector.x, y*vector.y, z*vector.z);
+    }
+    
     public Vector normalise(double length){
-        double mag = magnitude();
-        return new Vector(length*(x/mag), length*(y/mag), length*(z/mag));
+        double magnitude = magnitude();
+        return new Vector(x/magnitude, y/magnitude, z/magnitude).scale(length);
     }
 
     public boolean equalTo(Vector vector) {
@@ -62,6 +66,11 @@ public class Vector {
         }else{
             return angle;  
         } 
+    }
+    
+    @Override
+    public String toString(){
+        return x + ", " + y + ", " + z;
     }
 
 }

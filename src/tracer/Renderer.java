@@ -7,15 +7,15 @@ package tracer;
 public class Renderer {
     
     private final int WIDTH, HEIGHT;
-    private final int[] image; // row based index. pixel idx = 3 * ((row * width) + column) 
+    private final double[] image; // row based index. pixel idx = 3 * ((row * width) + column) 
     
     Renderer(int width, int height){
         this.WIDTH = width;
         this.HEIGHT = height;    
-        image = new int[this.WIDTH * this.HEIGHT * 3];
+        image = new double[this.WIDTH * this.HEIGHT * 3];
     }
     
-    public int[] getImage(){
+    public double[] getImage(){
         return this.image;
     }
     
@@ -36,7 +36,7 @@ public class Renderer {
     }
     
     private int findIndex(int[] imageCoordinate){
-        return 3 * ((imageCoordinate[0] * this.WIDTH) + imageCoordinate[1]);
+        return 3 * ((imageCoordinate[1] * this.WIDTH) + imageCoordinate[0]);
     }
     
     

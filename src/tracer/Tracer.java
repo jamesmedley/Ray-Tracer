@@ -1,5 +1,8 @@
 package tracer;
 
+import entities.Entity;
+import java.util.ArrayList;
+
 /**
  *
  * @author james
@@ -25,45 +28,74 @@ public class Tracer {
     }
     
     private RGB traceRay(Ray ray, Scene scene){
-        /* 
-            1) (intersection point, surface normal vector, entity) <- scene.intersect(ray)
-                a) Compute position of first intersection with an object in scene
-            
-            2) r = -2(ray.getDirection.dot(N))*N + ray.getDirection
-            
-            3) t = calculate refracted ray  using Snell's law. if total internal reflection dont trace transmissive ray!
+        Intersection intersection = scene.intersect(ray);
+      //  System.out.println(intersection.getIntersection().getX() + ", " +intersection.getIntersection().getY() + ", " +intersection.getIntersection().getZ());
+        RGB I = shade(intersection, ray, scene);
+       // System.out.println(I.toString());
+        //Vector intersectionPoint = intersection.getIntersection();
+        //Vector normal = intersection.getSurfaceNormal();
+        //Entity entity = intersection.getEntity();
+        //Vector rayDirection = ray.getDirection();
+        //Vector R = rayDirection.addVector(normal.scale(2*(rayDirection.dot(normal))));
+        //Vector T = new Vector(0,0,0);
+                // I = I.add(traceRay(new Ray(intersectionPoint, R), scene).scale(entity.getSpecular()))
+                // .add(traceRay(new Ray(intersectionPoint, T), scene).scale(entity.getTransmissive())); 
+                                
+        return I;
         
-            4) rgb = shade(point of intersection, surface normal, material properties, ray, scene) 
-                                + (entity.getReflectivity()[2])*traceRay(Q, r, scene)
-                                + (entity.getReflectivity()[3])*traceRay(Q, t, scene) // K_t should be 1-K_s
-        
-            5) return rgb
-        */
-        return rgb;
     }
     
-    private RGB shade(Vector intersection, Vector surfaceNormal, Entities entity, Ray ray, Scene scene){
-        /*
-            I = entity.getEmissive();
-            for each light:
-                attenuation = light.distanceAttenuation(intersection) * shadowAttenuation(intersection, scene)
-                L = light.getDirection(intersection)
-                I = I + scene.ambient + attenuation*(entity.getDiffuse() + entity.getSpecular())
-                
+    private RGB shade(Intersection intersection, Ray ray, Scene scene){
+        RGB I = scene.getAmbient();
+        if(intersection == null){
             return I;
-        */
-       
-               
+        }
+        Entity entity = intersection.getEntity();
+        I = I.multiply(entity.getDiffuse());
+       // System.out.println(I.toString());
+        Vector intersectionPoint = intersection.getIntersection();
+        Vector normal = intersection.getSurfaceNormal();
+        ArrayList<LightSource> lights = scene.getLights();
+        RGB diffuse = new RGB(0,0,0);
+        RGB specular = new RGB(0,0,0);
+       // System.out.println("----------------------------------------------------------");
+      //  System.out.println(intersectionPoint);
+        for(LightSource light:lights){
+          //  System.out.println(light.getPosition());
+            RGB intensityDiffuse = light.getIntensityDiffuse();
+            RGB intensitySpecular = light.getIntensitySpecular();
+            
+            Vector L = light.getPosition().addVector(intersectionPoint.scale(-1)).normalise(1);
+            Vector V = ray.getDirection().normalise(-1);
+            Vector H = V.addVector(L).normalise(1);
+            
+            double NdotL = normal.dot(L);
+            double NdotH = normal.dot(H);
+            
+            double NdotH_alpha = Math.pow(NdotH, entity.getShininess());
+            
+            double attenuation = light.distanceAttenuation(intersectionPoint)*shadowAttenuation(light, L, intersectionPoint, scene);
+            
+            diffuse = diffuse.add(intensityDiffuse.scale(NdotL * attenuation));
+            specular = specular.add(intensitySpecular.scale(NdotH_alpha * attenuation));
+        }
+        I = I.add(diffuse.multiply(entity.getDiffuse())).add(specular.multiply(entity.getSpecular()));
+        
+        return I;
     }
     
-    private int shadowAttenuation(Vector point, Scene scene){
-        /*
-        
-            if ray intersects another object before reaching the light source:
-                return 0
-            else:   
-                return 1
-        
-        */
+    private int shadowAttenuation(LightSource light, Vector lightDirection, Vector intersectionPoint, Scene scene){
+        Ray ray = new Ray(intersectionPoint.addVector(lightDirection.scale(0.001)), lightDirection);
+        Intersection intersection = scene.intersect(ray);
+        if(intersection == null){
+            return 1;
+        }
+        double distanceToLight = light.getPosition().addVector(intersectionPoint.scale(-1)).magnitude();
+        double distanceToIntersection = intersection.getIntersection().addVector(intersectionPoint.scale(-1)).magnitude();
+        if(distanceToIntersection <= distanceToLight){
+            return 0;
+        }else{
+            return 1;
+        }
     }
 }
