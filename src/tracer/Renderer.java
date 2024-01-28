@@ -5,39 +5,38 @@ package tracer;
  * @author james
  */
 public class Renderer {
-    
+
     private final int WIDTH, HEIGHT;
     private final double[] image; // row based index. pixel idx = 3 * ((row * width) + column) 
-    
-    Renderer(int width, int height){
+
+    Renderer(int width, int height) {
         this.WIDTH = width;
-        this.HEIGHT = height;    
+        this.HEIGHT = height;
         image = new double[this.WIDTH * this.HEIGHT * 3];
     }
-    
-    public double[] getImage(){
+
+    public double[] getImage() {
         return this.image;
     }
-    
-    public int[] getDimensions(){
+
+    public int[] getDimensions() {
         return new int[]{this.WIDTH, this.HEIGHT};
     }
-    
-    public void paintPixel(int[] imageCoordinate, RGB value){ // value: [r,g,b]
+
+    public void paintPixel(int[] imageCoordinate, RGB value) { // value: [r,g,b]
         int index = findIndex(imageCoordinate);
         this.image[index] = value.getRed(); //RED
-        this.image[index+1] = value.getGreen(); //GREEN
-        this.image[index+2] = value.getBlue(); //BLUE
+        this.image[index + 1] = value.getGreen(); //GREEN
+        this.image[index + 2] = value.getBlue(); //BLUE
     }
-    
-    public RGB samplePixel(int[] imageCoordinate){
+
+    public RGB samplePixel(int[] imageCoordinate) {
         int index = findIndex(imageCoordinate);
-        return new RGB(this.image[index], this.image[index+1], this.image[index+2]);
+        return new RGB(this.image[index], this.image[index + 1], this.image[index + 2]);
     }
-    
-    private int findIndex(int[] imageCoordinate){
+
+    private int findIndex(int[] imageCoordinate) {
         return 3 * ((imageCoordinate[1] * this.WIDTH) + imageCoordinate[0]);
     }
-    
-    
+
 }

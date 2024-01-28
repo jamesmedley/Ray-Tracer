@@ -1,41 +1,44 @@
 package tracer;
 
+import maths.Vector;
+
 /**
  *
  * @author james
  */
-public class LightSource{
-    private final RGB intensityDiffuse;
-    private final RGB intensitySpecular;
+public class LightSource {
+
     private final Vector position;
-    
-    public LightSource(Vector position, RGB intensityDiffuse, RGB intensitySpecular){
+    private final RGB colour;
+    private final double intensity;
+
+    public LightSource(Vector position, RGB colour, double intensity) {
         this.position = position;
-        this.intensityDiffuse = intensityDiffuse;
-        this.intensitySpecular = intensitySpecular;
+        this.colour = colour;
+        this.intensity = intensity;
     }
 
-    public RGB getIntensityDiffuse(){
-        return intensityDiffuse;
+    public double getIntensity() {
+        return intensity;
     }
-    
-    public RGB getIntensitySpecular(){
-        return intensitySpecular;
+
+    public RGB getColour() {
+        return colour;
     }
-    
-    public Vector getPosition(){
+
+    public Vector getPosition() {
         return position;
     }
-    
-    public double distanceAttenuation(Vector point){
+
+    public double distanceAttenuation(Vector point) {
         // constants to fine tune attenuation effect
         double a = 0.000005;
         double b = 0;
         double c = 0;
-        
+
         double distance = position.addVector(point.scale(-1)).magnitude();
-        double attenuation = 1/(a*Math.pow(distance, 2) + b*distance + c);
+        double attenuation = 1 / (a * Math.pow(distance, 2) + b * distance + c);
         return attenuation;
-        
+
     }
 }

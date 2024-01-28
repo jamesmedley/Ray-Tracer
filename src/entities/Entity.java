@@ -1,50 +1,56 @@
 package entities;
 
 import tracer.RGB;
-import tracer.Ray;
-import tracer.Vector;
+import maths.Ray;
+import maths.Vector;
 
 /**
  *
  * @author james
  */
 public class Entity {
+
     protected Vector position;
-    protected Vector diffuse;
-    protected Vector specular;
+    protected RGB colour;
+    protected double diffuse;
+    protected double specular;
     protected double transmissive;  // t should be 1-s
-    protected RGB emissive;
+    protected double emissive;
     protected double shininess;
-    
-    public Vector getPosition(){
+
+    public Vector getPosition() {
         return position;
     }
-    
-    public Vector getDiffuse(){
+
+    public RGB getColour() {
+        return colour;
+    }
+
+    public double getDiffuse() {
         return diffuse;
     }
-    
-    public Vector getSpecular(){
+
+    public double getSpecular() {
         return specular;
     }
-    
-    public double getTransmissive(){
+
+    public double getTransmissive() {
         return transmissive;
     }
-    
-    public RGB getEmissive(){
+
+    public double getEmissive() {
         return emissive;
     }
-    
-    public double getShininess(){
+
+    public double getShininess() {
         return shininess;
     }
-    
-    public Vector intersectionPoint(Ray ray){
-        return new Vector(0,0,0);
+
+    public Vector intersectionPoint(Ray ray) {
+        return new Vector(0, 0, 0);
     }
-    
-    public Vector normalAt(Vector intersectionPoint){
-        return new Vector(0,0,0);
+
+    public Vector normalAt(Vector intersectionPoint) {
+        return new Vector(0, 0, 0);
     }
 }

@@ -1,8 +1,8 @@
 package entities;
 
+import maths.Ray;
+import maths.Vector;
 import tracer.RGB;
-import tracer.Ray;
-import tracer.Vector;
 
 /**
  *
@@ -12,8 +12,9 @@ public class Sphere extends Entity {
 
     private final double radius;
 
-    public Sphere(Vector position, Vector diffuse, Vector specular, double transmissive, RGB emissive, double shininess, double radius) {
+    public Sphere(Vector position, RGB colour, double diffuse, double specular, double transmissive, double emissive, double shininess, double radius) {
         this.position = position;
+        this.colour = colour;
         this.diffuse = diffuse;
         this.specular = specular;
         this.transmissive = transmissive;
@@ -39,20 +40,19 @@ public class Sphere extends Entity {
         double f = position.getZ();
         double A = Math.pow(a, 2) + Math.pow(b, 2) + Math.pow(c, 2);
         double B = 2 * (a * (i - d) + b * (j - e) + c * (k - f));
-        double C = (Math.pow(i, 2) + Math.pow(j, 2) + Math.pow(k, 2)) + (Math.pow(d, 2) + Math.pow(e, 2) + Math.pow(f, 2)) - 2 * (i * d + j * e + k * f) - Math.pow(radius, 2);
-        double discriminant = Math.pow(B, 2) - (4 * a * c);
+        double C = (i * i + j * j + k * k) + (d * d + e * e + f * f) - 2 * (i * d + j * e + k * f) - radius * radius;
+        double discriminant = B * B - (4 * a * c);
         if (discriminant < 0) {
             return null;
         }
         double[] solutions = solveQuadratic(A, B, C);
         double distance = Math.min(solutions[0], solutions[1]);
-        if(distance < 0){
+        if (distance < 0) {
             return null;
-        }else{
+        } else {
             return new Vector(i + distance * a, j + distance * b, k + distance * c);
         }
-        
-        
+
     }
 
     @Override
@@ -61,8 +61,8 @@ public class Sphere extends Entity {
     }
 
     private double[] solveQuadratic(double a, double b, double c) {
-        double posSolution = (-1*b + Math.sqrt(Math.pow(b, 2) - (4 * a * c))) / (2 * a);
-        double negSolution = (-1*b - Math.sqrt(Math.pow(b, 2) - (4 * a * c))) / (2 * a);
+        double posSolution = (-1 * b + Math.sqrt(b * b - (4 * a * c))) / (2 * a);
+        double negSolution = (-1 * b - Math.sqrt(b * b - (4 * a * c))) / (2 * a);
         return new double[]{posSolution, negSolution};
     }
 

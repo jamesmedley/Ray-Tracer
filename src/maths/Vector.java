@@ -1,4 +1,4 @@
-package tracer;
+package maths;
 
 /**
  *
@@ -9,7 +9,7 @@ public class Vector {
     private final double x;
     private final double y;
     private final double z;
-    
+
     public Vector(double x, double y, double z) { //cartesian
         this.x = x;
         this.y = y;
@@ -23,7 +23,7 @@ public class Vector {
     public double getY() {
         return y;
     }
-    
+
     public double getZ() {
         return z;
     }
@@ -33,43 +33,43 @@ public class Vector {
     }
 
     public double magnitude() {
-        return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
+        return Math.sqrt(x * x + y * y + z * z);
     }
-    
-    public Vector scale(double scale){
-        return new Vector(scale*x, scale*y, scale*z);
+
+    public Vector scale(double scale) {
+        return new Vector(scale * x, scale * y, scale * z);
     }
-    
-    public Vector pointMultiply(Vector vector){
-        return new Vector(x*vector.x, y*vector.y, z*vector.z);
+
+    public Vector pointMultiply(Vector vector) {
+        return new Vector(x * vector.x, y * vector.y, z * vector.z);
     }
-    
-    public Vector normalise(double length){
+
+    public Vector normalise(double length) {
         double magnitude = magnitude();
-        return new Vector(x/magnitude, y/magnitude, z/magnitude).scale(length);
+        return new Vector(x / magnitude, y / magnitude, z / magnitude).scale(length);
     }
 
     public boolean equalTo(Vector vector) {
         return x == vector.getX() && y == vector.getY() && z == vector.getZ();
     }
-    
-    public double dot(Vector vector){
-        return x*vector.getX() + y*vector.getY() + z*vector.getZ();
+
+    public double dot(Vector vector) {
+        return x * vector.getX() + y * vector.getY() + z * vector.getZ();
     }
-    
-    public double angle(Vector vector){ //returns angle between 2 vector directions in radians
+
+    public double angle(Vector vector) { //returns angle between 2 vector directions in radians
         double dotProduct = dot(vector);
         double productOfMags = magnitude() * vector.magnitude();
         double angle = Math.acos(dotProduct / productOfMags);
-        if(Double.isNaN(angle)){
+        if (Double.isNaN(angle)) {
             return 0;
-        }else{
-            return angle;  
-        } 
+        } else {
+            return angle;
+        }
     }
-    
+
     @Override
-    public String toString(){
+    public String toString() {
         return x + ", " + y + ", " + z;
     }
 

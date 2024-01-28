@@ -1,6 +1,7 @@
 package tracer;
 
-import entities.Plane;
+import maths.Ray;
+import maths.Vector;
 
 /**
  *
@@ -10,8 +11,8 @@ public class Camera {
     private final Vector position;
     
     public Camera(){
-        double diagonalLength = Math.sqrt(Math.pow(Main.WIDTH/2, 2) + Math.pow(Main.HEIGHT/2, 2));
-        double d = diagonalLength/Math.tan(Main.DFOV/2);
+        double diagonalLength = Math.sqrt(Math.pow(Properties.WIDTH/2, 2) + Math.pow(Properties.HEIGHT/2, 2));
+        double d = diagonalLength/Math.tan(Properties.DFOV/2);
         position = new Vector(0,0, -d);
     }
     
@@ -26,8 +27,8 @@ public class Camera {
     }
     
     private Vector imageToWorldCoordinates(double[] imageCoordinates){
-        imageCoordinates[0] = imageCoordinates[0] - Main.WIDTH/2;
-        imageCoordinates[1] = Main.HEIGHT/2 - imageCoordinates[1];
+        imageCoordinates[0] = imageCoordinates[0] - Properties.WIDTH/2;
+        imageCoordinates[1] = Properties.HEIGHT/2 - imageCoordinates[1];
         return new Vector(imageCoordinates[0], imageCoordinates[1], 0);
     }
     
