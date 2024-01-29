@@ -57,7 +57,7 @@ public class Tracer {
         Vector rayDirection = ray.getDirection();
         Vector R = rayDirection.addVector(normal.scale(-2 * (rayDirection.dot(normal))));
         Vector T = new Vector(0, 0, 0);
-        I = I.add(traceRay(new Ray(intersectionPoint.addVector(R.scale(DELTA)), R), scene, depth - 1).multiply(entity.getSpecular()));
+        I = I.add(traceRay(new Ray(intersectionPoint.addVector(R.scale(DELTA)), R), scene, depth - 1).multiply(entity.getMaterial().getSpecular()));
         //.add(traceRay(new Ray(intersectionPoint, T), scene, depth-1).scale(entity.getTransmissive())); 
         return I;
     }
@@ -65,7 +65,7 @@ public class Tracer {
     private RGB shade(Intersection intersection, Ray ray, Scene scene) {
         RGB I = scene.getAmbient();
         Entity entity = intersection.getEntity();
-        I = I.multiply(entity.getColour().multiply(entity.getDiffuse()));
+        I = I.multiply(entity.getMaterial().getColour().multiply(entity.getMaterial().getAmbient()));
         Vector intersectionPoint = intersection.getIntersection();
         Vector normal = intersection.getSurfaceNormal();
         ArrayList<LightSource> lights = scene.getLights();
@@ -81,17 +81,16 @@ public class Tracer {
             double NdotL = normal.dot(L);
             double NdotH = normal.dot(H);
 
-            double NdotH_alpha = Math.pow(NdotH, entity.getShininess());
-
+            double NdotH_alpha = Math.pow(NdotH, entity.getMaterial().getShininess());
             double attenuation = light.distanceAttenuation(intersectionPoint) * shadowAttenuation(light, L, intersectionPoint, scene);
 
-            diffuse = diffuse.add(intensity.scale(NdotL * attenuation));
-            specular = specular.add(intensity.scale(NdotH_alpha * attenuation));
+            diffuse = diffuse.add(intensity.multiply(NdotL * attenuation));
+            specular = specular.add(intensity.multiply(NdotH_alpha * attenuation));
         }
 
-        diffuse = diffuse.multiply(entity.getColour()).multiply(entity.getDiffuse());
-        specular = specular.multiply(entity.getSpecular());
-        RGB emissive = entity.getColour().multiply(entity.getEmissive());
+        diffuse = diffuse.multiply(entity.getMaterial().getColour()).multiply(entity.getMaterial().getDiffuse());
+        specular = specular.multiply(entity.getMaterial().getSpecular());
+        RGB emissive = entity.getMaterial().getColour().multiply(entity.getMaterial().getEmissive());
 
         I = I.add(diffuse).add(specular).add(emissive);
 

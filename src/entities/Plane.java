@@ -2,7 +2,7 @@ package entities;
 
 import maths.Ray;
 import maths.Vector;
-import tracer.RGB;
+import tracer.Material;
 
 /**
  *
@@ -12,14 +12,9 @@ public class Plane extends Entity {
 
     private final Vector normal;
 
-    public Plane(Vector position, RGB colour, double diffuse, double specular, double transmissive, double emissive, double shininess, Vector normal) {
+    public Plane(Vector position, Material material, Vector normal) {
         this.position = position;
-        this.colour = colour;
-        this.diffuse = diffuse;
-        this.specular = specular;
-        this.transmissive = transmissive;
-        this.emissive = emissive;
-        this.shininess = shininess;
+        this.material = material;
         this.normal = normal;
     }
 

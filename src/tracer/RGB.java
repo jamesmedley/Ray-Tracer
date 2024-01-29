@@ -1,5 +1,7 @@
 package tracer;
 
+import maths.Vector;
+
 /**
  *
  * @author james
@@ -30,13 +32,6 @@ public class RGB {
         return new double[]{RED, GREEN, BLUE};
     }
 
-    public RGB scale(double scalar) {
-        double r = Math.max(0, Math.min(RED * scalar, 1));
-        double g = Math.max(0, Math.min(GREEN * scalar, 1));
-        double b = Math.max(0, Math.min(BLUE * scalar, 1));
-        return new RGB(r, g, b);
-    }
-
     public RGB add(RGB colour) {
         double r = Math.max(0, Math.min(RED + colour.RED, 1));
         double g = Math.max(0, Math.min(GREEN + colour.GREEN, 1));
@@ -65,8 +60,19 @@ public class RGB {
         return new RGB(r, g, b);
     }
 
+    public RGB multiply(Vector vector) {
+        double r = RED * vector.getX();
+        double g = GREEN * vector.getY();
+        double b = BLUE * vector.getZ();
+        return new RGB(r, g, b);
+    }
+
     public RGB divide(int samplesPerPixel) {
         return new RGB(RED / samplesPerPixel, GREEN / samplesPerPixel, BLUE / samplesPerPixel);
+    }
+
+    public Vector asVector() {
+        return new Vector(RED, GREEN, BLUE);
     }
 
     @Override

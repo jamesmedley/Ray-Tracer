@@ -34,12 +34,12 @@ public class Scene {
         return lights;
     }
 
-    public void addSphere(Vector position, RGB colour, double diffuse, double specular, double transmissive, double emissive, double shininess, double radius) {
-        entities.add(new Sphere(position, colour, diffuse, specular, transmissive, emissive, shininess, radius));
+    public void addSphere(Vector position, Material material, double radius) {
+        entities.add(new Sphere(position, material, radius));
     }
 
-    public void addPlane(Vector position, RGB colour, double diffuse, double specular, double transmissive, double emissive, double shininess, Vector normal) {
-        entities.add(new Plane(position, colour, diffuse, specular, transmissive, emissive, shininess, normal));
+    public void addPlane(Vector position, Material material, Vector normal) {
+        entities.add(new Plane(position, material, normal));
     }
 
     public void addLight(Vector position, RGB colour, double intensity) {

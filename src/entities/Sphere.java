@@ -2,7 +2,7 @@ package entities;
 
 import maths.Ray;
 import maths.Vector;
-import tracer.RGB;
+import tracer.Material;
 
 /**
  *
@@ -12,14 +12,9 @@ public class Sphere extends Entity {
 
     private final double radius;
 
-    public Sphere(Vector position, RGB colour, double diffuse, double specular, double transmissive, double emissive, double shininess, double radius) {
+    public Sphere(Vector position, Material material, double radius) {
         this.position = position;
-        this.colour = colour;
-        this.diffuse = diffuse;
-        this.specular = specular;
-        this.transmissive = transmissive;
-        this.emissive = emissive;
-        this.shininess = shininess;
+        this.material = material;
         this.radius = radius;
     }
 
