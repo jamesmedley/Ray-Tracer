@@ -8,68 +8,55 @@ import maths.Vector;
  */
 public class Material {
 
-    private RGB colour;
-    private Vector ambient;
-    private Vector diffuse;
-    private Vector specular;
-    private Vector emissive;
-    private double shininess;
+    private final RGB colour;
+    private final Vector ambient;
+    private final Vector diffuse;
+    private final Vector specular;
+    private final double transmissive;
+    private final Vector emissive;
+    private final double shininess;
+    private final double refractiveIndex;
 
-    public Material(RGB colour, Vector ambient, Vector diffuse, Vector specular, Vector emissive, double shininess) {
+    public Material(RGB colour, Vector ambient, Vector diffuse, Vector specular, double transmissive, Vector emissive, double shininess, double refractiveIndex) {
         this.colour = colour;
         this.ambient = ambient;
         this.diffuse = diffuse;
         this.specular = specular;
+        this.transmissive = transmissive;
         this.emissive = emissive;
         this.shininess = shininess;
+        this.refractiveIndex = refractiveIndex;
     }
 
     public RGB getColour() {
         return colour;
     }
 
-    public void setColour(RGB colour) {
-        this.colour = colour;
-    }
-
     public Vector getAmbient() {
         return ambient;
-    }
-
-    public void setAmbient(Vector ambient) {
-        this.ambient = ambient;
     }
 
     public Vector getDiffuse() {
         return diffuse;
     }
 
-    public void setDiffuse(Vector diffuse) {
-        this.diffuse = diffuse;
-    }
-
     public Vector getSpecular() {
         return specular;
     }
 
-    public void setSpecular(Vector specular) {
-        this.specular = specular;
+    public double getTransmissive() {
+        return transmissive;
     }
 
     public Vector getEmissive() {
         return emissive;
     }
 
-    public void setEmissive(Vector emissive) {
-        this.emissive = emissive;
-    }
-
     public double getShininess() {
         return shininess;
     }
-
-    public void setShininess(double shininess) {
-        this.shininess = shininess;
+    
+    public double getRefractiveIndex(){
+        return refractiveIndex;
     }
-
 }

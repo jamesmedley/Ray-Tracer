@@ -70,6 +70,10 @@ public class RGB {
     public RGB divide(int samplesPerPixel) {
         return new RGB(RED / samplesPerPixel, GREEN / samplesPerPixel, BLUE / samplesPerPixel);
     }
+    
+    public RGB gammaCorrection(){
+        return new RGB(Math.sqrt(RED), Math.sqrt(GREEN), Math.sqrt(BLUE));
+    }
 
     public Vector asVector() {
         return new Vector(RED, GREEN, BLUE);

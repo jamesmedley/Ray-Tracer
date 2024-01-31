@@ -7,10 +7,12 @@ package maths;
 public class Ray {
     private final Vector origin;
     private final Vector direction;
+    private final double refractiveIndex;
     
-    public Ray(Vector origin, Vector direction){
+    public Ray(Vector origin, Vector direction, double refractiveIndex){
         this.origin = origin;
         this.direction = direction;
+        this.refractiveIndex = refractiveIndex;
     }
     
     public Vector getOrigin(){
@@ -19,5 +21,9 @@ public class Ray {
     
     public Vector getDirection(){
         return direction;
+    }
+    
+    public double getRefractiveIndex(){
+        return refractiveIndex;
     }
 }

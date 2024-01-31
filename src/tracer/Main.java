@@ -4,7 +4,6 @@ import maths.Vector;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Random;
 import javax.imageio.ImageIO;
 
@@ -17,37 +16,45 @@ public class Main {
 
     public static void main(String[] args) {
         Main main = new Main();
-        main.generate();
+        String imageName;
+        if (args.length == 0) {
+            imageName = "default.png";
+        } else {
+            imageName = args[0];
+            if (!imageName.toLowerCase().endsWith(".png")) {
+                imageName += ".png";
+            }
+        }
+        main.generate(imageName);
     }
 
-    private void generate() {
+    private void generate(String imageName) {
         Renderer renderer = new Renderer(Properties.WIDTH, Properties.HEIGHT);
         Scene scene = new Scene(Properties.AMBIENT);
 
         scene.addPlane(new Vector(0, -500, 0), Materials.NEUTRAL, new Vector(0, 1, 0)); // Floor
-        //    scene.addPlane(new Vector(0, 500, 0), Materials.NEUTRAL, new Vector(0, -1, 0)); // Ceiling
-        //  scene.addPlane(new Vector(0, 0, 1000), Materials.MIRROR, new Vector(0, 0, -1)); // Back wall 
-        //   scene.addPlane(new Vector(0, 0, -1300), Materials.MIRROR, new Vector(0, 0, 1)); // Front wall 
-        //   scene.addPlane(new Vector(500, 0, 0), Materials.materialForColour(new RGB(1,0,0)), new Vector(-1, 0, 0)); // Right wall
-        //  scene.addPlane(new Vector(-500, 0, 0), Materials.materialForColour(new RGB(0,1,0)), new Vector(1, 0, 0)); // left wall
+        scene.addPlane(new Vector(0, 500, 0), Materials.NEUTRAL, new Vector(0, -1, 0)); // Ceiling
+        scene.addPlane(new Vector(0, 0, 1000), Materials.MIRROR, new Vector(0, 0, -1)); // Back wall 
+        scene.addPlane(new Vector(0, 0, -1300), Materials.MIRROR, new Vector(0, 0, 1)); // Front wall 
+        scene.addPlane(new Vector(500, 0, 0), Materials.materialForColour(new RGB(0, 0, 1)), new Vector(-1, 0, 0)); // Right wall
+        scene.addPlane(new Vector(-500, 0, 0), Materials.materialForColour(new RGB(1, 0, 0)), new Vector(1, 0, 0)); // left wall
 
         scene.addSphere(new Vector(-150, -300, 300), Materials.GOLD, 200);
-        scene.addSphere(new Vector(300, -400, 200), Materials.MIRROR, 100);
+        scene.addSphere(new Vector(300, -400, 700), Materials.materialForColour(new RGB(0, 1, 0)), 100);
 
-        scene.addLight(new Vector(499, 499, 999), new RGB(1, 0, 0), 2);
-        scene.addLight(new Vector(-499, 499, 999), new RGB(0, 1, 0), 2);
-        scene.addLight(new Vector(0, 499, 0), new RGB(0, 0, 1), 2);
+        scene.addLight(new Vector(499, 499, 999), new RGB(1, 1, 1), 2);
+        scene.addLight(new Vector(-499, 499, 999), new RGB(1, 1, 1), 2);
+        scene.addLight(new Vector(0, 499, 0), new RGB(1, 1, 1), 2);
 
         Tracer tracer = new Tracer(renderer);
-        tracer.traceImage(scene, Properties.SAMPLES_PER_PIXEL);
+        tracer.traceImage(scene, Properties.SAMPLES_PER_PIXEL, imageName);
 
         double[] image = renderer.getImage();
-        System.out.println(Arrays.toString(image));
-        writeImageFile(image);
+        writeImageFile(image, imageName);
         // end of program!
     }
 
-    private void writeImageFile(double[] image) {
+    private void writeImageFile(double[] image, String imageName) {
         BufferedImage bufferedImage = new BufferedImage(Properties.WIDTH, Properties.HEIGHT, BufferedImage.TYPE_INT_RGB);
         for (int y = 0; y < Properties.HEIGHT; y++) {
             for (int x = 0; x < Properties.WIDTH; x++) {
@@ -61,7 +68,7 @@ public class Main {
             }
         }
         try {
-            File outputFile = new File("src/images/test3.png");
+            File outputFile = new File("src/images/" + imageName);
             ImageIO.write(bufferedImage, "png", outputFile);
             System.out.println("Image saved successfully!");
         } catch (IOException e) {
