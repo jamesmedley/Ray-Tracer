@@ -1,12 +1,13 @@
 package tracer;
 
+import java.io.Serializable;
 import maths.Vector;
 
 /**
  *
  * @author james
  */
-public class Material {
+public class Material implements Serializable {
 
     private final RGB colour;
     private final Vector ambient;
@@ -55,8 +56,8 @@ public class Material {
     public double getShininess() {
         return shininess;
     }
-    
-    public double getRefractiveIndex(){
+
+    public double getRefractiveIndex() {
         return refractiveIndex;
     }
 }

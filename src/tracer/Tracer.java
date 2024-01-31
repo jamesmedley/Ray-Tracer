@@ -16,7 +16,7 @@ public class Tracer {
 
     private final Renderer renderer;
     private final Camera camera;
-    private final double DELTA = 0.0001;
+    private final double EPSILON = 0.0001;
 
     public Tracer(Renderer renderer) {
         this.renderer = renderer;
@@ -71,7 +71,7 @@ public class Tracer {
         Material material = entity.getMaterial();
 
         double n1 = ray.getRefractiveIndex();
-        I = I.add(traceRay(new Ray(intersectionPoint.addVector(R.scale(DELTA)), R, n1), scene, depth - 1).multiply(material.getSpecular()));
+        I = I.add(traceRay(new Ray(intersectionPoint.addVector(R.scale(EPSILON)), R, n1), scene, depth - 1).multiply(material.getSpecular()));
 
 //        double n2 = material.getRefractiveIndex();
 //        double n = n1 / n2;
@@ -125,7 +125,7 @@ public class Tracer {
     }
 
     private int shadowAttenuation(LightSource light, Vector lightDirection, Vector intersectionPoint, Scene scene) {
-        Ray ray = new Ray(intersectionPoint.addVector(lightDirection.scale(DELTA)), lightDirection, 1);
+        Ray ray = new Ray(intersectionPoint.addVector(lightDirection.scale(EPSILON)), lightDirection, 1);
         Intersection intersection = scene.intersect(ray);
         if (intersection == null) {
             return 1;

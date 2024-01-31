@@ -1,5 +1,6 @@
 package entities;
 
+import java.io.Serializable;
 import maths.Ray;
 import maths.Vector;
 import tracer.Material;
@@ -8,7 +9,7 @@ import tracer.Material;
  *
  * @author james
  */
-public class Entity {
+public class Entity implements Serializable {
 
     protected Vector position;
     protected Material material;

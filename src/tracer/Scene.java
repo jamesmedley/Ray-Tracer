@@ -6,19 +6,22 @@ import maths.Vector;
 import entities.Entity;
 import entities.Plane;
 import entities.Sphere;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author james
  */
-public class Scene {
+public class Scene implements Serializable {
 
-    private final ArrayList<Entity> entities = new ArrayList();
-    private final ArrayList<LightSource> lights = new ArrayList();
+    private final ArrayList<Entity> entities;
+    private final ArrayList<LightSource> lights;
     private final RGB ambient;
 
     public Scene(RGB ambient) {
+        this.lights = new ArrayList();
+        this.entities = new ArrayList();
         this.ambient = ambient;
     }
 

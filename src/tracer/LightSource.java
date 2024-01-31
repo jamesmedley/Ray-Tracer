@@ -1,12 +1,13 @@
 package tracer;
 
+import java.io.Serializable;
 import maths.Vector;
 
 /**
  *
  * @author james
  */
-public class LightSource {
+public class LightSource implements Serializable {
 
     private final Vector position;
     private final RGB colour;

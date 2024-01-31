@@ -1,12 +1,13 @@
 package tracer;
 
+import java.io.Serializable;
 import maths.Vector;
 
 /**
  *
  * @author james
  */
-public class RGB {
+public class RGB implements Serializable {
 
     private final double RED, GREEN, BLUE;
 
@@ -70,8 +71,8 @@ public class RGB {
     public RGB divide(int samplesPerPixel) {
         return new RGB(RED / samplesPerPixel, GREEN / samplesPerPixel, BLUE / samplesPerPixel);
     }
-    
-    public RGB gammaCorrection(){
+
+    public RGB gammaCorrection() {
         return new RGB(Math.sqrt(RED), Math.sqrt(GREEN), Math.sqrt(BLUE));
     }
 

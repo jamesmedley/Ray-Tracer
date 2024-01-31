@@ -1,9 +1,14 @@
 package tracer;
 
+import java.awt.Desktop;
 import maths.Vector;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Random;
 import javax.imageio.ImageIO;
 
@@ -30,6 +35,22 @@ public class Main {
 
     private void generate(String imageName) {
         Renderer renderer = new Renderer(Properties.WIDTH, Properties.HEIGHT);
+
+        // Create and save scene object
+        //Scene scene = createScene();
+        
+        // Load scene from files.
+        Scene scene = deserializeScene("src/scenes/mirrors.ser");
+
+        Tracer tracer = new Tracer(renderer);
+        tracer.traceImage(scene, Properties.SAMPLES_PER_PIXEL, imageName);
+
+        double[] image = renderer.getImage();
+        writeImageFile(image, imageName);
+        // end of program!
+    }
+
+    private Scene createScene() {
         Scene scene = new Scene(Properties.AMBIENT);
 
         scene.addPlane(new Vector(0, -500, 0), Materials.NEUTRAL, new Vector(0, 1, 0)); // Floor
@@ -39,19 +60,36 @@ public class Main {
         scene.addPlane(new Vector(500, 0, 0), Materials.materialForColour(new RGB(0, 0, 1)), new Vector(-1, 0, 0)); // Right wall
         scene.addPlane(new Vector(-500, 0, 0), Materials.materialForColour(new RGB(1, 0, 0)), new Vector(1, 0, 0)); // left wall
 
-        scene.addSphere(new Vector(-150, -300, 300), Materials.GOLD, 200);
+        scene.addSphere(new Vector(-150, -300, 300), Materials.MIRROR, 200);
         scene.addSphere(new Vector(300, -400, 700), Materials.materialForColour(new RGB(0, 1, 0)), 100);
 
         scene.addLight(new Vector(499, 499, 999), new RGB(1, 1, 1), 2);
         scene.addLight(new Vector(-499, 499, 999), new RGB(1, 1, 1), 2);
         scene.addLight(new Vector(0, 499, 0), new RGB(1, 1, 1), 2);
 
-        Tracer tracer = new Tracer(renderer);
-        tracer.traceImage(scene, Properties.SAMPLES_PER_PIXEL, imageName);
+        serializeScene(scene, "src/scenes/mirrors.ser");
+        return scene;
+    }
 
-        double[] image = renderer.getImage();
-        writeImageFile(image, imageName);
-        // end of program!
+    private void serializeScene(Scene scene, String fileName) {
+        try ( ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName))) {
+            oos.writeObject(scene);
+            System.out.println("Object serialized and saved to " + fileName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Scene deserializeScene(String fileName) {
+        try ( ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName))) {
+            Object obj = ois.readObject();
+            if (obj instanceof Scene) {
+                return (Scene) obj;
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private void writeImageFile(double[] image, String imageName) {
@@ -71,6 +109,7 @@ public class Main {
             File outputFile = new File("src/images/" + imageName);
             ImageIO.write(bufferedImage, "png", outputFile);
             System.out.println("Image saved successfully!");
+            Desktop.getDesktop().open(outputFile);
         } catch (IOException e) {
         }
     }
