@@ -20,27 +20,31 @@ public class Main {
 
     public static void main(String[] args) {
         Main main = new Main();
-        String imageName;
+        String imageName, sceneName;
         if (args.length == 0) {
             imageName = "default1.png";
+            sceneName = "2spheres.ser";
         } else {
             imageName = args[0];
             if (!imageName.toLowerCase().endsWith(".png")) {
                 imageName += ".png";
             }
+            sceneName = args[1];
+            if (!sceneName.toLowerCase().endsWith(".ser")) {
+                sceneName += ".ser";
+            }
         }
-        main.generate(imageName);
+        main.generate(imageName, sceneName);
     }
 
-    private void generate(String imageName) {
+    private void generate(String imageName, String sceneName) {
         Renderer renderer = new Renderer(Properties.WIDTH, Properties.HEIGHT);
 
         // Create and save scene object
         //Scene scene = createScene();
-        
         // Load scene from files.
-        Scene scene = deserializeScene("scenes/2spheres.ser");
-        Camera camera = new Camera(new Vector(0, 0, 0), new Vector(0, 0, 1), new Vector(0,0,0));
+        Scene scene = deserializeScene("scenes/" + sceneName);
+        Camera camera = new Camera(new Vector(0, 0, 0), new Vector(0, 0, 1), new Vector(0, 1, 0));
         Tracer tracer = new Tracer(renderer, camera);
         tracer.traceImage(scene, Properties.SAMPLES_PER_PIXEL, imageName);
 
@@ -53,11 +57,11 @@ public class Main {
         Scene scene = new Scene(Properties.AMBIENT);
 
         scene.addPlane(new Vector(0, -500, 0), Materials.NEUTRAL, new Vector(0, 1, 0)); // Floor
-     //   scene.addPlane(new Vector(0, 500, 0), Materials.NEUTRAL, new Vector(0, -1, 0)); // Ceiling
-     //   scene.addPlane(new Vector(0, 0, 1000), Materials.MIRROR, new Vector(0, 0, -1)); // Back wall 
-     //   scene.addPlane(new Vector(0, 0, -1300), Materials.MIRROR, new Vector(0, 0, 1)); // Front wall 
-      //  scene.addPlane(new Vector(500, 0, 0), Materials.materialForColour(new RGB(0, 0, 1)), new Vector(-1, 0, 0)); // Right wall
-     //   scene.addPlane(new Vector(-500, 0, 0), Materials.materialForColour(new RGB(1, 0, 0)), new Vector(1, 0, 0)); // left wall
+        //   scene.addPlane(new Vector(0, 500, 0), Materials.NEUTRAL, new Vector(0, -1, 0)); // Ceiling
+        //   scene.addPlane(new Vector(0, 0, 1000), Materials.MIRROR, new Vector(0, 0, -1)); // Back wall 
+        //   scene.addPlane(new Vector(0, 0, -1300), Materials.MIRROR, new Vector(0, 0, 1)); // Front wall 
+        //  scene.addPlane(new Vector(500, 0, 0), Materials.materialForColour(new RGB(0, 0, 1)), new Vector(-1, 0, 0)); // Right wall
+        //   scene.addPlane(new Vector(-500, 0, 0), Materials.materialForColour(new RGB(1, 0, 0)), new Vector(1, 0, 0)); // left wall
 
         scene.addSphere(new Vector(-150, -300, 300), Materials.MIRROR, 200);
         scene.addSphere(new Vector(300, -400, 700), Materials.materialForColour(new RGB(0, 1, 0)), 100);
