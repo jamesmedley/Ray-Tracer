@@ -33,7 +33,7 @@ public class Sphere extends Entity {
         double d = position.getX();
         double e = position.getY();
         double f = position.getZ();
-        double A = Math.pow(a, 2) + Math.pow(b, 2) + Math.pow(c, 2);
+        double A = a * a + b * b + c * c;
         double B = 2 * (a * (i - d) + b * (j - e) + c * (k - f));
         double C = (i * i + j * j + k * k) + (d * d + e * e + f * f) - 2 * (i * d + j * e + k * f) - radius * radius;
         double discriminant = B * B - (4 * a * c);

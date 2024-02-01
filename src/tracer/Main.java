@@ -9,7 +9,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Random;
 import javax.imageio.ImageIO;
 
 
@@ -23,7 +22,7 @@ public class Main {
         Main main = new Main();
         String imageName;
         if (args.length == 0) {
-            imageName = "default.png";
+            imageName = "default1.png";
         } else {
             imageName = args[0];
             if (!imageName.toLowerCase().endsWith(".png")) {
@@ -40,9 +39,9 @@ public class Main {
         //Scene scene = createScene();
         
         // Load scene from files.
-        Scene scene = deserializeScene("src/scenes/mirrors.ser");
-
-        Tracer tracer = new Tracer(renderer);
+        Scene scene = deserializeScene("scenes/2spheres.ser");
+        Camera camera = new Camera(new Vector(0, 0, 0), new Vector(0, 0, 1), new Vector(0,0,0));
+        Tracer tracer = new Tracer(renderer, camera);
         tracer.traceImage(scene, Properties.SAMPLES_PER_PIXEL, imageName);
 
         double[] image = renderer.getImage();
@@ -54,11 +53,11 @@ public class Main {
         Scene scene = new Scene(Properties.AMBIENT);
 
         scene.addPlane(new Vector(0, -500, 0), Materials.NEUTRAL, new Vector(0, 1, 0)); // Floor
-        scene.addPlane(new Vector(0, 500, 0), Materials.NEUTRAL, new Vector(0, -1, 0)); // Ceiling
-        scene.addPlane(new Vector(0, 0, 1000), Materials.MIRROR, new Vector(0, 0, -1)); // Back wall 
-        scene.addPlane(new Vector(0, 0, -1300), Materials.MIRROR, new Vector(0, 0, 1)); // Front wall 
-        scene.addPlane(new Vector(500, 0, 0), Materials.materialForColour(new RGB(0, 0, 1)), new Vector(-1, 0, 0)); // Right wall
-        scene.addPlane(new Vector(-500, 0, 0), Materials.materialForColour(new RGB(1, 0, 0)), new Vector(1, 0, 0)); // left wall
+     //   scene.addPlane(new Vector(0, 500, 0), Materials.NEUTRAL, new Vector(0, -1, 0)); // Ceiling
+     //   scene.addPlane(new Vector(0, 0, 1000), Materials.MIRROR, new Vector(0, 0, -1)); // Back wall 
+     //   scene.addPlane(new Vector(0, 0, -1300), Materials.MIRROR, new Vector(0, 0, 1)); // Front wall 
+      //  scene.addPlane(new Vector(500, 0, 0), Materials.materialForColour(new RGB(0, 0, 1)), new Vector(-1, 0, 0)); // Right wall
+     //   scene.addPlane(new Vector(-500, 0, 0), Materials.materialForColour(new RGB(1, 0, 0)), new Vector(1, 0, 0)); // left wall
 
         scene.addSphere(new Vector(-150, -300, 300), Materials.MIRROR, 200);
         scene.addSphere(new Vector(300, -400, 700), Materials.materialForColour(new RGB(0, 1, 0)), 100);
@@ -67,7 +66,7 @@ public class Main {
         scene.addLight(new Vector(-499, 499, 999), new RGB(1, 1, 1), 2);
         scene.addLight(new Vector(0, 499, 0), new RGB(1, 1, 1), 2);
 
-        serializeScene(scene, "src/scenes/mirrors.ser");
+        serializeScene(scene, "scenes/2spheres.ser");
         return scene;
     }
 
@@ -106,18 +105,11 @@ public class Main {
             }
         }
         try {
-            File outputFile = new File("src/images/" + imageName);
+            File outputFile = new File("images/" + imageName);
             ImageIO.write(bufferedImage, "png", outputFile);
             System.out.println("Image saved successfully!");
             Desktop.getDesktop().open(outputFile);
         } catch (IOException e) {
-        }
-    }
-
-    private static void fillArrayWithRandomValues(double[] array) { // generate random image
-        Random random = new Random();
-        for (int i = 0; i < array.length; i++) {
-            array[i] = random.nextDouble();
         }
     }
 

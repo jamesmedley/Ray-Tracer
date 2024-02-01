@@ -18,9 +18,9 @@ public class Tracer {
     private final Camera camera;
     private final double EPSILON = 0.0001;
 
-    public Tracer(Renderer renderer) {
+    public Tracer(Renderer renderer, Camera camera) {
         this.renderer = renderer;
-        camera = new Camera();
+        this.camera = camera;
     }
 
     public Renderer traceImage(Scene scene, int samplesPerPixel, String imageName) {

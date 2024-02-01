@@ -42,7 +42,15 @@ public class Vector implements Serializable {
         return new Vector(scale * x, scale * y, scale * z);
     }
 
-    public Vector pointMultiply(Vector vector) {
+    public Vector xScale(Vector vector) {
+        return new Vector(x * vector.x, y, z);
+    }
+
+    public Vector yScale(Vector vector) {
+        return new Vector(x, y * vector.y, z);
+    }
+
+    public Vector elementwiseMultiply(Vector vector) {
         return new Vector(x * vector.x, y * vector.y, z * vector.z);
     }
 
@@ -59,15 +67,12 @@ public class Vector implements Serializable {
         return x * vector.getX() + y * vector.getY() + z * vector.getZ();
     }
 
-    public double angle(Vector vector) { //returns angle between 2 vector directions in radians
-        double dotProduct = dot(vector);
-        double productOfMags = magnitude() * vector.magnitude();
-        double angle = Math.acos(dotProduct / productOfMags);
-        if (Double.isNaN(angle)) {
-            return 0;
-        } else {
-            return angle;
-        }
+    public Vector cross(Vector vector) {
+        double i = this.y * vector.z - this.z * vector.y;
+        double j = this.z * vector.x - this.x * vector.z;
+        double k = this.x * vector.y - this.y * vector.x;
+
+        return new Vector(i, j, k);
     }
 
     @Override
