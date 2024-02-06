@@ -16,9 +16,10 @@ public class Material implements Serializable {
     private final double transmissive;
     private final Vector emissive;
     private final double shininess;
+    private final double roughness;
     private final double refractiveIndex;
 
-    public Material(RGB colour, Vector ambient, Vector diffuse, Vector specular, double transmissive, Vector emissive, double shininess, double refractiveIndex) {
+    public Material(RGB colour, Vector ambient, Vector diffuse, Vector specular, double transmissive, Vector emissive, double shininess, double roughness, double refractiveIndex) {
         this.colour = colour;
         this.ambient = ambient;
         this.diffuse = diffuse;
@@ -26,6 +27,7 @@ public class Material implements Serializable {
         this.transmissive = transmissive;
         this.emissive = emissive;
         this.shininess = shininess;
+        this.roughness = roughness;
         this.refractiveIndex = refractiveIndex;
     }
 
@@ -55,6 +57,10 @@ public class Material implements Serializable {
 
     public double getShininess() {
         return shininess;
+    }
+    
+    public double getRoughness() {
+        return roughness;
     }
 
     public double getRefractiveIndex() {

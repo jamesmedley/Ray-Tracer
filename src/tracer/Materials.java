@@ -19,6 +19,7 @@ public class Materials {
             0, // transmissive
             new Vector(0, 0, 0), // emissive
             77, // shininess
+            0, // roughness
             0 // refractive index
     );
 
@@ -30,6 +31,7 @@ public class Materials {
             0, // transmissive
             new Vector(0, 0, 0), // emissive
             0, // shininess
+            0, // roughness
             0
     );
 
@@ -41,6 +43,7 @@ public class Materials {
             1, // transmissive            
             new Vector(0, 0, 0), // emissive
             96, // shininess
+            0, // roughness
             1.52 // refractive index
 
     );
@@ -53,6 +56,7 @@ public class Materials {
             0, // transmissive            
             new Vector(0, 0, 0), // emissive
             28, // shininess
+            0.05, // roughness
             0 // refractive index
     );
 
@@ -64,6 +68,7 @@ public class Materials {
             0, // transmissive            
             new Vector(0, 0, 0), // emissive
             26, // shininess
+            0.05, // roughness
             0 // refractive index
     );
 
@@ -75,6 +80,7 @@ public class Materials {
             0, // transmissive            
             new Vector(0, 0, 0), // emissive
             77, // shininess
+            0, // roughness
             0 // refractive index
     );
 
@@ -86,6 +92,7 @@ public class Materials {
             0, // transmissive            
             new Vector(0, 0, 0), // emissive
             77, // shininess
+            0, // roughness
             0 // refractive index
     );
 
@@ -97,6 +104,7 @@ public class Materials {
             0, // transmissive            
             new Vector(0, 0, 0), // emissive
             13, // shininess
+            0, // roughness
             0 // refractive index
     );
 
@@ -108,6 +116,7 @@ public class Materials {
             0, // transmissive            
             new Vector(0, 0, 0), // emissive
             51, // shininess
+            0, // roughness
             0 // refractive index
     );
 
@@ -119,6 +128,7 @@ public class Materials {
             0, // transmissive            
             new Vector(0, 0, 0), // emissive
             51, // shininess
+            0.05, // roughness
             0 // refractive index
     );
 
@@ -130,6 +140,7 @@ public class Materials {
             0, // transmissive            
             new Vector(0, 0, 0), // emissive
             83, // shininess
+            0, // roughness
             0 // refractive index
     );
 
@@ -141,6 +152,7 @@ public class Materials {
             0, // transmissive            
             new Vector(0, 0, 0), // emissive
             10, // shininess
+            0.05, // roughness
             0 // refractive index
     );
 
@@ -152,6 +164,7 @@ public class Materials {
             0, // transmissive            
             new Vector(0, 0, 0), // emissive
             51, // shininess
+            0.05, // roughness
             0 // refractive index
     );
 
@@ -163,6 +176,7 @@ public class Materials {
             0, // transmissive            
             new Vector(0, 0, 0), // emissive
             90, // shininess
+            0, // roughness
             0 // refractive index
     );
 
@@ -174,6 +188,7 @@ public class Materials {
             0.45, // transmissive            
             new Vector(0, 0, 0), // emissive
             77, // shininess
+            0, // roughness
             1.57 // refractive index
     );
 
@@ -185,6 +200,7 @@ public class Materials {
             0.05, // transmissive           
             new Vector(0, 0, 0), // emissive
             13, // shininess
+            0, // roughness
             1.63 // refractive index
     );
 
@@ -196,6 +212,7 @@ public class Materials {
             0.18, // transmissive            
             new Vector(0, 0, 0), // emissive
             38, // shininess
+            0.05, // roughness
             1.47 // refractive index
     );
 
@@ -207,6 +224,7 @@ public class Materials {
             0.078, // transmissive            
             new Vector(0, 0, 0), // emissive
             11, // shininess
+            0, // roughness
             1.53 // refractive index
     );
 
@@ -218,6 +236,7 @@ public class Materials {
             0.45, // transmissive            
             new Vector(0, 0, 0), // emissive
             77, // shininess
+            0, // roughness
             1.76 // refractive index
     );
 
@@ -229,6 +248,7 @@ public class Materials {
             0.2, // transmissive            
             new Vector(0, 0, 0), // emissive
             13, // shininess
+            0, // roughness
             1.63 // refractive index
     );
 
@@ -240,6 +260,7 @@ public class Materials {
             0, // transmissive            
             new Vector(0, 0, 0), // emissive
             32, // shininess
+            0.1, // roughness
             0 // refractive index
     );
 
@@ -251,6 +272,7 @@ public class Materials {
             0, // transmissive            
             new Vector(0, 0, 0), // emissive
             10, // shininess
+            0.1, // roughness
             0 // refractive index
     );
 
@@ -263,6 +285,7 @@ public class Materials {
                 0, // transmissive                
                 new Vector(0, 0, 0), // emissive
                 13, // shininess
+                0, // roughness
                 0 // refractive index
         );
         return material;

@@ -14,8 +14,8 @@ public class Properties {
 
     static public final int SAMPLES_PER_PIXEL = 100;
 
-    static public final int PATH_DEPTH = 16;
+    static public final int PATH_DEPTH = 5;
 
-    static public final RGB AMBIENT = new RGB(0.1, 0.1, 0.1);
+    static public final RGB AMBIENT = new RGB(0.1, 0.1, 0.15);
 
 }

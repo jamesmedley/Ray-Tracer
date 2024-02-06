@@ -22,8 +22,8 @@ public class Main {
         Main main = new Main();
         String imageName, sceneName;
         if (args.length == 0) {
-            imageName = "default1.png";
-            sceneName = "2spheres.ser";
+            imageName = "roughness.png";
+            sceneName = "3spheres.ser";
         } else {
             imageName = args[0];
             if (!imageName.toLowerCase().endsWith(".png")) {
@@ -65,12 +65,14 @@ public class Main {
 
         scene.addSphere(new Vector(-150, -300, 300), Materials.MIRROR, 200);
         scene.addSphere(new Vector(300, -400, 700), Materials.materialForColour(new RGB(0, 1, 0)), 100);
+        scene.addSphere(new Vector(-600, -350, 200), Materials.BRONZE, 150);
+
 
         scene.addLight(new Vector(499, 499, 999), new RGB(1, 1, 1), 2);
         scene.addLight(new Vector(-499, 499, 999), new RGB(1, 1, 1), 2);
         scene.addLight(new Vector(0, 499, 0), new RGB(1, 1, 1), 2);
 
-        serializeScene(scene, "scenes/2spheres.ser");
+        serializeScene(scene, "scenes/3spheres.ser");
         return scene;
     }
 

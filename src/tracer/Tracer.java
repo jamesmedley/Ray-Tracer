@@ -67,7 +67,9 @@ public class Tracer {
         Vector normal = intersection.getSurfaceNormal();
         Entity entity = intersection.getEntity();
         Vector rayDirection = ray.getDirection();
-        Vector R = rayDirection.addVector(normal.scale(-2 * (rayDirection.dot(normal))));
+        Vector R = rayDirection.addVector(normal.scale(-2 * (rayDirection.dot(normal)))).normalise(1);
+       // System.out.println(R.magnitude());
+        R = R.addVector(randomUnitVector().scale(entity.getMaterial().getRoughness()));
         Material material = entity.getMaterial();
 
         double n1 = ray.getRefractiveIndex();
@@ -86,6 +88,16 @@ public class Tracer {
 //            I = I.add(traceRay(new Ray(intersectionPoint.addVector(R.scale(DELTA)), T, n2), scene, depth - 1).multiply(material.getTransmissive()));
 //        }
         return I;
+    }
+
+    private Vector randomUnitVector() {
+        Random random = new Random();
+        double a = random.nextDouble() * 2 - 1;
+        double b = random.nextDouble() * 2 - 1;
+        double c = random.nextDouble() * 2 - 1;
+        Vector unitVector = new Vector(a, b, c);
+        return unitVector.normalise(1);
+
     }
 
     private RGB shade(Intersection intersection, Ray ray, Scene scene) {
