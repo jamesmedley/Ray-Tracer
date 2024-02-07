@@ -15,7 +15,7 @@ public class Plane extends Entity {
     public Plane(Vector position, Material material, Vector normal) {
         this.position = position;
         this.material = material;
-        this.normal = normal;
+        this.normal = normal.normalise(1);
     }
 
     public Vector getNormal() {

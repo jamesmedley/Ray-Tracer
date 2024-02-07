@@ -1,9 +1,13 @@
 package tracer;
 
+import com.github.ivelate.JavaHDR.HDREncoder;
+import com.github.ivelate.JavaHDR.HDRImage;
 import maths.Intersection;
 import maths.Ray;
 import maths.Vector;
 import entities.Entity;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import me.tongfei.progressbar.ProgressBar;
@@ -17,10 +21,18 @@ public class Tracer {
     private final Renderer renderer;
     private final Camera camera;
     private final double EPSILON = 0.0001;
+    private final HDRImage SKYBOX_IMG;
+    private final int SKYBOX_WIDTH;
+    private final int SKYBOX_HEIGHT;
 
-    public Tracer(Renderer renderer, Camera camera) {
+    public Tracer(Renderer renderer, Camera camera) throws IOException {
         this.renderer = renderer;
         this.camera = camera;
+        File imageFile = new File(Properties.SKYBOX);
+        SKYBOX_IMG = HDREncoder.readHDR(imageFile, true);
+        SKYBOX_WIDTH = SKYBOX_IMG.getWidth();
+        SKYBOX_HEIGHT = SKYBOX_IMG.getHeight();
+
     }
 
     public Renderer traceImage(Scene scene, int samplesPerPixel, String imageName) {
@@ -28,6 +40,7 @@ public class Tracer {
         Random random = new Random(); // for anti-aliasing
         String totalTime;
         try ( ProgressBar pb = new ProgressBar(imageName, imageDimensions[0] * imageDimensions[1])) {
+            pb.setExtraMessage("Processing...");
             for (int i = 0; i < imageDimensions[0]; i++) {
                 for (int j = 0; j < imageDimensions[1]; j++) {
                     pb.step();
@@ -40,12 +53,11 @@ public class Tracer {
 
                         Ray ray = camera.rayForPixel(i + offsetX, j + offsetY);
 
-                        pixelColour = pixelColour.addNoLimit(traceRay(ray, scene, Properties.PATH_DEPTH));
+                        pixelColour = pixelColour.addNoLimit(traceRay(ray, scene, Properties.PATH_DEPTH, Properties.PATH_DEPTH));
                     }
                     pixelColour = pixelColour.divide(samplesPerPixel);
                     pixelColour = pixelColour.gammaCorrection();
                     renderer.paintPixel(new int[]{i, j}, pixelColour);
-                    pb.setExtraMessage("Processing...");
                 }
             }
             totalTime = pb.getTotalElapsed().toSeconds() + " seconds";
@@ -54,26 +66,72 @@ public class Tracer {
         return renderer;
     }
 
-    private RGB traceRay(Ray ray, Scene scene, int depth) {
+    private Vector randomUnitVector() {
+        Random random = new Random();
+        double a = random.nextDouble() * 2 - 1;
+        double b = random.nextDouble() * 2 - 1;
+        double c = random.nextDouble() * 2 - 1;
+        Vector unitVector = new Vector(a, b, c);
+        return unitVector.normalise(1);
+
+    }
+
+    private RGB traceDiffuse(Ray ray, Scene scene, int diffuseDepth) {
         Intersection intersection = scene.intersect(ray);
         if (intersection == null) {
-            return scene.getAmbient();
+            Vector direction = ray.getDirection().normalise(1);
+            RGB skyboxColour = skyboxColour(direction);
+            return skyboxColour;
         }
         RGB I = shade(intersection, ray, scene);
-        if (depth < 1) {
+        if (diffuseDepth < 1) {
             return I;
         }
         Vector intersectionPoint = intersection.getIntersection();
         Vector normal = intersection.getSurfaceNormal();
         Entity entity = intersection.getEntity();
-        Vector rayDirection = ray.getDirection();
-        Vector R = rayDirection.addVector(normal.scale(-2 * (rayDirection.dot(normal)))).normalise(1);
-       // System.out.println(R.magnitude());
-        R = R.addVector(randomUnitVector().scale(entity.getMaterial().getRoughness()));
         Material material = entity.getMaterial();
-
+        Vector lambertian = normal.addVector(randomUnitVector());
         double n1 = ray.getRefractiveIndex();
-        I = I.add(traceRay(new Ray(intersectionPoint.addVector(R.scale(EPSILON)), R, n1), scene, depth - 1).multiply(material.getSpecular()));
+        I = I.add(traceDiffuse(new Ray(intersectionPoint.addVector(lambertian.scale(EPSILON)), lambertian.normalise(1), n1), scene, diffuseDepth - 1)).multiply(material.getDiffuse().scale(lambertian.magnitude()));
+        return I;
+    }
+
+    private RGB traceSpecular(Ray ray, Scene scene, int specularDepth) {
+        Intersection intersection = scene.intersect(ray);
+        if (intersection == null) {
+            Vector direction = ray.getDirection().normalise(1);
+            RGB skyboxColour = skyboxColour(direction);
+            return skyboxColour;
+        }
+        RGB I = shade(intersection, ray, scene);
+        if (specularDepth < 1) {
+            return I;
+        }
+        Vector intersectionPoint = intersection.getIntersection();
+        Vector normal = intersection.getSurfaceNormal();
+        Vector rayDirection = ray.getDirection();
+        Entity entity = intersection.getEntity();
+        Material material = entity.getMaterial();
+        double n1 = ray.getRefractiveIndex();
+        Vector R = rayDirection.addVector(normal.scale(-2 * (rayDirection.dot(normal))));
+        R = R.addVector(randomUnitVector().scale(entity.getMaterial().getRoughness())).normalise(1);
+        I = I.add(traceSpecular(new Ray(intersectionPoint.addVector(R.scale(EPSILON)), R, n1), scene, specularDepth - 1).multiply(material.getSpecular()));
+        return I;
+    }
+
+    private RGB traceRay(Ray ray, Scene scene, int specularDepth, int diffuseDepth) {
+        Intersection intersection = scene.intersect(ray);
+        if (intersection == null) {
+            Vector direction = ray.getDirection().normalise(1);
+            RGB skyboxColour = skyboxColour(direction);
+            return skyboxColour;
+        }
+        RGB I = shade(intersection, ray, scene);
+
+        I = I.add(traceDiffuse(ray, scene, diffuseDepth));
+
+        I = I.add(traceSpecular(ray, scene, specularDepth));
 
 //        double n2 = material.getRefractiveIndex();
 //        double n = n1 / n2;
@@ -90,14 +148,15 @@ public class Tracer {
         return I;
     }
 
-    private Vector randomUnitVector() {
-        Random random = new Random();
-        double a = random.nextDouble() * 2 - 1;
-        double b = random.nextDouble() * 2 - 1;
-        double c = random.nextDouble() * 2 - 1;
-        Vector unitVector = new Vector(a, b, c);
-        return unitVector.normalise(1);
-
+    private RGB skyboxColour(Vector direction) {
+        double u = 0.5 + (Math.atan2(direction.getZ(), direction.getX())) / (2 * Math.PI);
+        double v = 1 - (0.5 + (Math.asin(direction.getY())) / (Math.PI));
+        int x = (int) (SKYBOX_WIDTH * u);
+        int y = (int) (SKYBOX_HEIGHT * v);
+        double red = Math.max(Math.min(SKYBOX_IMG.getPixelValue(x, y, 0), 1), 0);
+        double green = Math.max(Math.min(SKYBOX_IMG.getPixelValue(x, y, 1), 1), 0);
+        double blue = Math.max(Math.min(SKYBOX_IMG.getPixelValue(x, y, 2), 1), 0);
+        return new RGB(red, green, blue);
     }
 
     private RGB shade(Intersection intersection, Ray ray, Scene scene) {

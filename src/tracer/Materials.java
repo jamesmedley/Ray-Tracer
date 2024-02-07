@@ -6,7 +6,7 @@ import maths.Vector;
  *
  * @author james
  */
-public class Materials {
+public final class Materials {
 
     /*
         Materials sourced from: https://globe3d.sourceforge.io/g3d_html/gl-materials__ads.htm#26_5
@@ -14,11 +14,11 @@ public class Materials {
     public static Material MIRROR = new Material(
             new RGB(1, 1, 1), // colour
             new Vector(0.1, 0.1, 0.1), // ambient
-            new Vector(0.1, 0.1, 0.1), // diffuse
-            new Vector(0.8, 0.8, 0.8), // specular
+            new Vector(0, 0, 0), // diffuse
+            new Vector(1, 1, 1), // specular
             0, // transmissive
             new Vector(0, 0, 0), // emissive
-            77, // shininess
+            128, // shininess
             0, // roughness
             0 // refractive index
     );
@@ -285,7 +285,7 @@ public class Materials {
                 0, // transmissive                
                 new Vector(0, 0, 0), // emissive
                 13, // shininess
-                0, // roughness
+                0.05, // roughness
                 0 // refractive index
         );
         return material;

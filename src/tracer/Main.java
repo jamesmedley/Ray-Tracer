@@ -18,11 +18,11 @@ import javax.imageio.ImageIO;
  */
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Main main = new Main();
         String imageName, sceneName;
         if (args.length == 0) {
-            imageName = "roughness.png";
+            imageName = "default1.png";
             sceneName = "3spheres.ser";
         } else {
             imageName = args[0];
@@ -37,13 +37,13 @@ public class Main {
         main.generate(imageName, sceneName);
     }
 
-    private void generate(String imageName, String sceneName) {
+    private void generate(String imageName, String sceneName) throws IOException {
         Renderer renderer = new Renderer(Properties.WIDTH, Properties.HEIGHT);
 
         // Create and save scene object
-        //Scene scene = createScene();
+        Scene scene = createScene();
         // Load scene from files.
-        Scene scene = deserializeScene("scenes/" + sceneName);
+        //Scene scene = deserializeScene("scenes/" + sceneName);
         Camera camera = new Camera(new Vector(0, 0, 0), new Vector(0, 0, 1), new Vector(0, 1, 0));
         Tracer tracer = new Tracer(renderer, camera);
         tracer.traceImage(scene, Properties.SAMPLES_PER_PIXEL, imageName);
@@ -57,20 +57,19 @@ public class Main {
         Scene scene = new Scene(Properties.AMBIENT);
 
         scene.addPlane(new Vector(0, -500, 0), Materials.NEUTRAL, new Vector(0, 1, 0)); // Floor
-        //   scene.addPlane(new Vector(0, 500, 0), Materials.NEUTRAL, new Vector(0, -1, 0)); // Ceiling
-        //   scene.addPlane(new Vector(0, 0, 1000), Materials.MIRROR, new Vector(0, 0, -1)); // Back wall 
-        //   scene.addPlane(new Vector(0, 0, -1300), Materials.MIRROR, new Vector(0, 0, 1)); // Front wall 
-        //  scene.addPlane(new Vector(500, 0, 0), Materials.materialForColour(new RGB(0, 0, 1)), new Vector(-1, 0, 0)); // Right wall
-        //   scene.addPlane(new Vector(-500, 0, 0), Materials.materialForColour(new RGB(1, 0, 0)), new Vector(1, 0, 0)); // left wall
+        //  scene.addPlane(new Vector(0, 500, 0), Materials.NEUTRAL, new Vector(0, -1, 0)); // Ceiling
+        //  scene.addPlane(new Vector(0, 0, 1000), Materials.NEUTRAL, new Vector(0, 0, -1)); // Back wall 
+        //  scene.addPlane(new Vector(0, 0, -1300), Materials.NEUTRAL, new Vector(0, 0, 1)); // Front wall 
+        // scene.addPlane(new Vector(500, 0, 0), Materials.materialForColour(new RGB(0, 0, 1)), new Vector(-1, 0, 0)); // Right wall
+        //scene.addPlane(new Vector(-500, 0, 0), Materials.materialForColour(new RGB(1, 0, 0)), new Vector(1, 0, 0)); // left wall
 
-        scene.addSphere(new Vector(-150, -300, 300), Materials.MIRROR, 200);
+        scene.addSphere(new Vector(0, -300, 300), Materials.MIRROR, 200);
         scene.addSphere(new Vector(300, -400, 700), Materials.materialForColour(new RGB(0, 1, 0)), 100);
-        scene.addSphere(new Vector(-600, -350, 200), Materials.BRONZE, 150);
+        scene.addSphere(new Vector(-500, -350, 200), Materials.POLISHED_COPPER, 150);
 
-
-        scene.addLight(new Vector(499, 499, 999), new RGB(1, 1, 1), 2);
-        scene.addLight(new Vector(-499, 499, 999), new RGB(1, 1, 1), 2);
-        scene.addLight(new Vector(0, 499, 0), new RGB(1, 1, 1), 2);
+        scene.addLight(new Vector(-499, 499, 999), new RGB(1, 1, 1), 1);
+        scene.addLight(new Vector(499, 499, 999), new RGB(1, 1, 1), 1);
+        scene.addLight(new Vector(0, 499, 500), new RGB(1, 1, 1), 1);
 
         serializeScene(scene, "scenes/3spheres.ser");
         return scene;
