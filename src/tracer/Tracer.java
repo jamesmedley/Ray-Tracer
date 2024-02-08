@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import me.tongfei.progressbar.ProgressBar;
 
 /**
@@ -28,8 +30,10 @@ public class Tracer {
     public Tracer(Renderer renderer, Camera camera) throws IOException {
         this.renderer = renderer;
         this.camera = camera;
+        System.out.println("Loading Skybox...");
         File imageFile = new File(Properties.SKYBOX);
         SKYBOX_IMG = HDREncoder.readHDR(imageFile, true);
+        System.out.println("Done.");
         SKYBOX_WIDTH = SKYBOX_IMG.getWidth();
         SKYBOX_HEIGHT = SKYBOX_IMG.getHeight();
 
@@ -37,28 +41,35 @@ public class Tracer {
 
     public Renderer traceImage(Scene scene, int samplesPerPixel, String imageName) {
         int[] imageDimensions = renderer.getDimensions();
+        final int numThreads = Runtime.getRuntime().availableProcessors();
+        ExecutorService executor = Executors.newFixedThreadPool(numThreads);
         Random random = new Random(); // for anti-aliasing
         String totalTime;
         try ( ProgressBar pb = new ProgressBar(imageName, imageDimensions[0] * imageDimensions[1])) {
             pb.setExtraMessage("Processing...");
             for (int i = 0; i < imageDimensions[0]; i++) {
+                final int x = i;
                 for (int j = 0; j < imageDimensions[1]; j++) {
-                    pb.step();
-                    RGB pixelColour = new RGB(0, 0, 0);
+                    final int y = j;
+                    executor.execute(() -> {
+                        pb.step();
+                        RGB pixelColour = new RGB(0, 0, 0);
 
-                    for (int s = 0; s < samplesPerPixel; s++) {
-                        // random offsets between -1 and 1
-                        double offsetX = random.nextDouble() * 2 - 1;
-                        double offsetY = random.nextDouble() * 2 - 1;
-
-                        Ray ray = camera.rayForPixel(i + offsetX, j + offsetY);
-
-                        pixelColour = pixelColour.addNoLimit(traceRay(ray, scene, Properties.PATH_DEPTH, Properties.PATH_DEPTH));
-                    }
-                    pixelColour = pixelColour.divide(samplesPerPixel);
-                    pixelColour = pixelColour.gammaCorrection();
-                    renderer.paintPixel(new int[]{i, j}, pixelColour);
+                        for (int s = 0; s < samplesPerPixel; s++) {
+                            double offsetX = random.nextDouble() * 2 - 1;
+                            double offsetY = random.nextDouble() * 2 - 1;
+                            Ray ray = camera.rayForPixel(x + offsetX, y + offsetY);
+                            pixelColour = pixelColour.addNoLimit(traceRay(ray, scene, Properties.PATH_DEPTH, Properties.PATH_DEPTH));
+                        }
+                        pixelColour = pixelColour.divide(samplesPerPixel);
+                        pixelColour = pixelColour.gammaCorrection();
+                        renderer.paintPixel(new int[]{x, y}, pixelColour);
+                    });
                 }
+            }
+            executor.shutdown();
+            while (!executor.isTerminated()) {
+                // Wait for all threads to finish
             }
             totalTime = pb.getTotalElapsed().toSeconds() + " seconds";
         }

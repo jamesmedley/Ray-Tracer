@@ -12,9 +12,9 @@ public class Properties {
 
     static public final double DFOV = 1; // 1 radian = approx. 60 degrees
 
-    static public final int SAMPLES_PER_PIXEL = 250;
+    static public final int SAMPLES_PER_PIXEL = 500;
 
-    static public final int PATH_DEPTH = 16;
+    static public final int PATH_DEPTH = 50;
 
     static public final RGB AMBIENT = new RGB(0.1, 0.1, 0.1);
 
