@@ -18,6 +18,6 @@ public class Properties {
 
     static public final RGB AMBIENT = new RGB(0.1, 0.1, 0.1);
 
-    static public final String SKYBOX = "src/res/lilienstein_4k.hdr";
+    static public final String SKYBOX = "src/res/kloofendal_48d_partly_cloudy_puresky_4k.hdr";
 
 }

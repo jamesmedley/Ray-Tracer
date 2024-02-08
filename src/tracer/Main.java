@@ -22,8 +22,8 @@ public class Main {
         Main main = new Main();
         String imageName, sceneName;
         if (args.length == 0) {
-            imageName = "box.png";
-            sceneName = "box.ser";
+            imageName = "default1.png";
+            sceneName = "3spheres.ser";
         } else {
             imageName = args[0];
             if (!imageName.toLowerCase().endsWith(".png")) {
